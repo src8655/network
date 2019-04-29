@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class TCPServer {
 
@@ -30,10 +31,11 @@ public class TCPServer {
 			
 			//serverSocket.bind(new InetSocketAddress(inetAddress, 5000));
 			
-			serverSocket.bind(new InetSocketAddress("0.0.0.0", 5000));
-			
+			serverSocket.bind(new InetSocketAddress("0.0.0.0", 6000));
+			System.out.println("[server] waiting client...");
 			//3. accept
 			//   :클라이언트의 연결요청을 기다린다.
+			//	:요청시 클라이언트의 정보(ip)를 받아온다.
 			Socket socket = serverSocket.accept();	//blocking
 			
 			//클라이언트가 누군지
@@ -76,6 +78,8 @@ public class TCPServer {
 				
 				
 				
+			} catch (SocketException e) {
+				System.out.println("[server] sudden closed by client");
 			}catch (IOException e) {
 				e.printStackTrace();
 			}finally {
