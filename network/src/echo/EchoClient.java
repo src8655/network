@@ -26,6 +26,18 @@ public class EchoClient {
 			//2. 소켓 생성
 			socket = new Socket();
 			
+			//2_1. 소켓 버퍼 사이즈 확인
+			int receiveBufferSize = socket.getReceiveBufferSize();
+			int sendBufferSize = socket.getSendBufferSize();
+			System.out.println(receiveBufferSize + " : " + sendBufferSize);
+			
+			//2_2. 소켓 버퍼 사이즈 변경
+			socket.setReceiveBufferSize(1024*10);
+			socket.setSendBufferSize(1024*10);
+			receiveBufferSize = socket.getReceiveBufferSize();
+			sendBufferSize = socket.getSendBufferSize();
+			System.out.println(receiveBufferSize + " : " + sendBufferSize);
+			
 			//3. 서버 연결
 			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
 			log("connected");

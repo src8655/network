@@ -1,8 +1,4 @@
-/chat/
-/echo/
 /http/
-/io/
-/test/
-/thread/
 /udp/
-/util/
+/echo/
+/test/

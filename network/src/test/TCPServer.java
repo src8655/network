@@ -1,13 +1,8 @@
 package test;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,6 +16,10 @@ public class TCPServer {
 		try {
 			//1. 서버소켓 생성
 			serverSocket = new ServerSocket();
+			
+
+			//1_1. Time-Weait 시간에 소켓에 포트번호 할당을 가능하게 하기 위해
+			serverSocket.setReuseAddress(true);
 			
 			//2. 바인딩(binding)
 			//   :Socket에 SocketAddress(IPAddress + Port)를 바인딩 한다.
@@ -71,6 +70,7 @@ public class TCPServer {
 					
 					
 					//6. 데이터 쓰기
+					Thread.sleep(2000);
 					os.write(data.getBytes("utf-8"));
 					
 				}

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class TCPClient {
 	private static final String SERVER_IP = "192.168.0.5";
@@ -15,6 +16,24 @@ public class TCPClient {
 		Socket socket = new Socket();
 		
 		try {
+			//1_1. 소켓 버퍼 사이즈 확인
+			int receiveBufferSize = socket.getReceiveBufferSize();
+			int sendBufferSize = socket.getSendBufferSize();
+			System.out.println(receiveBufferSize + " : " + sendBufferSize);
+			
+			//1_2. 소켓 버퍼 사이즈 변경
+			socket.setReceiveBufferSize(1024*10);
+			socket.setSendBufferSize(1024*10);
+			receiveBufferSize = socket.getReceiveBufferSize();
+			sendBufferSize = socket.getSendBufferSize();
+			System.out.println(receiveBufferSize + " : " + sendBufferSize);
+			
+			//1_3. SO_NODELAY(Nagle Algorithm Off) 저쪽 윈도우 사이즈 상관안하고 즉시
+			socket.setTcpNoDelay(true);
+			
+			//1_4. SO_TIMEOUT
+			socket.setSoTimeout(1000);
+			
 			//2. 서버 연결
 			socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT));
 			System.out.println("[client] connected");
@@ -38,6 +57,8 @@ public class TCPClient {
 			data = new String(buffer, 0, readByteCount, "utf-8");
 			System.out.println("[client] received : " + data);
 			
+		} catch (SocketTimeoutException e) {
+			System.out.println("[client] time out");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
